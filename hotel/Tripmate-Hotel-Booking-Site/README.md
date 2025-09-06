@@ -1,105 +1,49 @@
 # ✨ TripMate — Your Travel Buddy
 
-**TripMate** is a **full-stack travel listing and booking platform** built using the **MERN stack**. Users can explore, create, and manage travel properties across India. The platform also features an awareness section highlighting fraudulent practices in **fantasy sports apps** like Dream11.
+**TripMate** is a **travel listing and booking platform** built using **HTML, CSS, and JavaScript**.  
+Users can explore, create, and manage travel properties across India.  
+
+The platform also includes a **unique awareness section** highlighting fraudulent practices in **fantasy sports apps** like Dream11.
 
 ---
 
 ## 🚀 Features
 
-- 🗺️ Browse and discover travel listings with rich visuals & map locations  
-- 📝 Create, update, and delete your own property listings  
-- 💬 User authentication with secure login/logout  
-- ⚡ Smooth, responsive UI with animations and dynamic interactivity  
-- ⚠️ **Awareness simulation** to expose how fake bots manipulate fantasy apps (like Dream11)  
+- 🗺️ Browse and discover travel listings with maps and visual details  
+- 📝 Simple property listing pages (create, view, delete)  
+- 💬 User-friendly interface with easy navigation  
+- ⚡ Responsive design using modern HTML5 and CSS3  
+- ⚠️ **Awareness simulation** exposing manipulation by fake bots in fantasy apps (like Dream11)  
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category          | Technologies                          |
-|-------------------|---------------------------------------|
-| **Frontend**      | React.js, Tailwind CSS, Axios         |
-| **Backend**       | Node.js, Express.js                   |
-| **Database**      | MongoDB, Mongoose                     |
-| **Authentication**| Passport.js, Express-session          |
-| **File Uploads**  | Multer, AWS S3 / Cloudinary           |
-| **Maps**          | Mapbox, Leaflet, MapTiler             |
-| **Others**        | Dotenv, Method-Override               |
+| Category          | Technologies                 |
+|------------------|-------------------------------|
+| **Frontend**     | HTML5, CSS3, JavaScript       |
+| **Styling**      | Custom CSS, Flexbox, Grid     |
+| **Maps**         | Mapbox / Leaflet (optional)   |
+| **Others**       | Vanilla JS for interactivity  |
 
 ---
 
 ## 📌 Project Status
 
-🔧 This project is under active development and testing.  
-Feel free to try it out at: [https://tripmate.org](https://tripmate.org)
+🔧 Currently under active development and testing.  
+🌍 Check out the live demo: [https://tripmate.org]https://tripmate-org.onrender.com/signup?tab=login
 
-🙌 Feedback and suggestions are always welcome — reach out via DM or [LinkedIn](https://linkedin.com).
+🙌 Feedback and suggestions are always welcome — connect with me on [LinkedIn](https://www.linkedin.com/in/atrij-ghosh-86690234a).
 
 ---
 
 ## ⚙️ How to Run Locally
 
-1. **Clone the repo**
+1. **Clone the repository**  
    ```bash
-   git clone https://github.com/piyansu/Tripmate-Hotel-Booking-Site
-   ```
-
-2. **Install backend dependencies**
-   ```bash
-   cd tripmate
-   npm install
-   ```
-
-3. **Install frontend dependencies**
-   ```bash
-   cd client
-   npm install
-   ```
-
-4. **Add your `.env` file** in the root of the backend folder with:
-   - MongoDB URI
-   - Cloudinary credentials
-   - Mapbox token, etc.
-
-5. **Run the backend**
-   ```bash
-   npm start
-   ```
-
-6. **Run the frontend**
-   ```bash
-   cd client
-   npm start
-   ```
-
----
-
-## 🎯 Awareness Goal
-
-TripMate is more than a travel app. It features a **simulation that reveals how bots are injected** into fantasy sports apps like **Dream11**, showing how **real players lose unfairly**. This feature is added to spread **digital awareness and safety** among online users.
-
----
+   git clone https://github.com/A-tri-j/Tripmate-Hotel-Booking-Site
 
 ## © License
 
-**© 2024 Piyansu Saha.**  
+© 2025 Atrij Ghosh.  
 Licensed under the [MIT License](https://opensource.org/licenses/MIT)
-
----
-
-## 🔒 Protection Note
-
-This project is developed by **Piyansu Saha** for **educational and awareness purposes only**.  
-Please **do not copy or use** the content/code for **commercial purposes** without permission.
-
----
-
-## 🌐 Connect with Me
-
-[![Portfolio](https://img.shields.io/badge/Portfolio-blueviolet?style=flat&logo=vercel)](https://verdant-llama-347286.netlify.app/)  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/piyansuwebdeveloper)  
-[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/piyansu)
-
----
-
-> *“Build projects that solve real problems and tell real stories.”*
