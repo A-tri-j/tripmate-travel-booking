@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripMate</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/listing.css" />
+    <link rel="stylesheet" href="/css/edit.css" />
+    <link rel="stylesheet" href="/css/show.css" />
+    <link rel="stylesheet" href="/css/new.css" />
+    <link rel="stylesheet" href="/css/signup.css" />
+    <link rel="stylesheet" href="/css/user-listing.css" />
+    <link rel="stylesheet" href="/css/booking.css" />
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+  </head>
+  <body>
+    <%- include('../includes/navbar') %>
+    <div class="container" style="margin-top: 4rem">
+      <%- include('../includes/flash') %> <%- body %>
+    </div>
+    <%- include('../includes/footer') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/signup.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+      // Script to synchronize rating slider with star rating
+      document.addEventListener("DOMContentLoaded", function () {
+        const ratingSlider = document.getElementById("rating-slider");
+        const ratingValueDisplay = document.getElementById(
+          "rating-value-display"
+        );
+        const starInputs = document.querySelectorAll(".rating-stars input");
+
+        if (ratingSlider && ratingValueDisplay) {
+          ratingSlider.addEventListener("input", function () {
+            const value = this.value;
+            ratingValueDisplay.textContent = value;
+
+            // Update the star rating
+            document.getElementById("star" + value).checked = true;
+          });
+        }
+
+        if (starInputs.length > 0) {
+          starInputs.forEach((input) => {
+            input.addEventListener("change", function () {
+              if (this.checked) {
+                const value = this.value;
+                ratingSlider.value = value;
+                ratingValueDisplay.textContent = value;
+              }
+            });
+          });
+        }
+      });
+    </script>
+    <script src="/js/map.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-M6KQZ5SF6V"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-M6KQZ5SF6V");
+    </script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4409198394306107"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

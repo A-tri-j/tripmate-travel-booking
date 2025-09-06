@@ -1,0 +1,281 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="detail-container">
+  <div class="detail-card">
+    <!-- Replace the existing detail-image-container with this code -->
+    <div class="photo-layout-container">
+      <div class="photo-grid">
+        <% if (listing.images) { %>
+          <div class="main-photo">
+            <img src="<%= listing.images[0].url %>" alt="<%= listing.title %>" />
+          </div>
+          
+          <% if (listing.images.length > 1) { %>
+          <div class="side-photos">
+            <div class="side-photo-top">
+              <img src="<%= listing.images[1].url %>" alt="<%= listing.title %>" />
+            </div>
+            
+            <% if (listing.images.length > 2) { %>
+            <div class="side-photo-bottom">
+              <img src="<%= listing.images[2].url %>" alt="<%= listing.title %>" />
+            </div>
+            <% } %>
+          </div>
+          <% } %>
+        <% } else { %>
+          <p style="text-align: center; color: gray">No images available.</p>
+        <% } %>
+      </div>
+    </div>
+    <div class="detail-info">
+      <% if (listing.owner && listing.owner.username) { %>
+      <h5 class="owner-title">Listed by: <%= listing.owner.username %></h5>
+      <% } %>
+      <h2 class="detail-title"><%= listing.title %></h2>
+      <div class="detail-location">
+        <i class="fa-solid fa-location-dot"></i>
+        <%= listing.location %>
+      </div>
+      <div class="detail-price">
+        <%= `₹${new Intl.NumberFormat('en-IN').format(listing.price || 500)}` %>
+        <span>/night</span>
+      </div>
+      <p class="detail-description"><%= listing.description %></p>
+      <div class="detail-actions">
+        <% if ( (currentUser && listing.owner && listing.owner._id &&
+        currentUser._id.equals(listing.owner._id)) || (currentUser &&
+        currentUser._id.toString() === "6801126fc3625bbece6291e2") ) { %>
+
+        <form action="/listings/<%= listing._id %>/edit" method="GET">
+          <button class="btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Edit
+          </button>
+        </form>
+        <form
+          action="/listings/<%= listing._id %>?_method=DELETE"
+          method="POST"
+          onsubmit="return confirm('Are you sure you want to delete this listing?')"
+        >
+          <button class="btn-delete">
+            <i class="fa-solid fa-trash"></i> Delete
+          </button>
+        </form>
+        <% } else { %>
+        <form action="/listings/<%= listing._id %>/booking" method="get">
+          <button type="submit" class="btn-book">
+            <i class="fa-solid fa-house-circle-check"></i>&nbsp;&nbsp;Book Now
+          </button>
+        </form>
+
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews Display Section -->
+  <div class="reviews-display">
+    <div class="reviews-header">
+      <h3 class="reviews-title">
+        <i class="fa-solid fa-comments"></i> Reviews
+      </h3>
+      <div class="reviews-summary">
+        <% if (listing.reviews && listing.reviews.length > 0) { let totalRating
+        = 0; listing.reviews.forEach(review => { totalRating +=
+        Number(review.rating) || 0; }); let avgRating = (totalRating /
+        listing.reviews.length).toFixed(1); %>
+        <div class="review-average">
+          <i class="fa-solid fa-star"></i> <%= avgRating %>
+        </div>
+        <div class="review-count">
+          <%= listing.reviews.length %> <%= listing.reviews.length === 1 ?
+          'review' : 'reviews' %>
+        </div>
+        <% } else { %>
+        <div class="review-count">No reviews yet</div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Individual Reviews Section -->
+    <div class="review-list">
+      <% if (listing.reviews && listing.reviews.length > 0) { for (let review of
+      listing.reviews) { %>
+      <div class="review-item">
+        <div class="review-user">
+          <% if (review.author && review.author.username) { %>
+          <div class="review-avatar">
+            <%= review.author.username.charAt(0).toUpperCase() %>
+          </div>
+          <div class="review-user-info">
+            <div class="review-username"><%= review.author.username %></div>
+            <div class="review-date">
+              <%= review.createdAt ? new
+              Date(review.createdAt).toLocaleDateString("en-US", { year:
+              "numeric", month: "long", day: "numeric" }) : "Date unavailable"
+              %>
+            </div>
+          </div>
+          <% } else { %>
+          <div class="review-avatar">?</div>
+          <div class="review-user-info">
+            <div class="review-username">Anonymous</div>
+            <div class="review-date">
+              <%= review.createdAt ? new
+              Date(review.createdAt).toLocaleDateString("en-US", { year:
+              "numeric", month: "long", day: "numeric" }) : "Date unavailable"
+              %>
+            </div>
+          </div>
+          <% } %>
+        </div>
+        <div class="review-rating">
+          <div class="review-stars">
+            <% for (let i = 1; i <= 5; i++) { %> <% if (i <= review.rating) { %>
+            <i class="fa-solid fa-star full-star"></i>
+            <% } else { %>
+            <i class="fa-solid fa-star empty-star"></i>
+            <% } %> <% } %>
+          </div>
+        </div>
+        <div class="review-content"><%= review.comment %></div>
+        <% if (currentUser && review.author && review.author._id &&
+        currentUser._id.equals(review.author._id)) { %>
+        <form
+          action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+          method="POST"
+        >
+          <button class="review-delete">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </form>
+        <% } %>
+      </div>
+      <% } } else { %>
+      <div class="reviews-empty">
+        <i class="fa-regular fa-comment-dots"></i>
+        <div class="reviews-empty-title">No Reviews Yet</div>
+        <p>Be the first to share your experience at this property!</p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Review Form Section -->
+  <% if (!currentUser) { %>
+  <div class="review-section">
+    <h3>Leave a Review</h3>
+    <p>Please <a href="/login">login</a> to leave a review.</p>
+  </div>
+  <% } else if (currentUser._id.equals(listing.owner._id)) { %>
+  <!-- Owner can't leave review - show nothing -->
+  <% } else { %>
+  <div class="review-section">
+    <h3>Leave a Review</h3>
+    <form
+      action="/listings/<%= listing._id %>/reviews"
+      method="POST"
+      class="review-form"
+    >
+      <div class="review-form-grid">
+        <div class="rating-container">
+          <label class="rating-label">Rating</label>
+          <div class="rating-stars">
+            <% for (let i = 5; i >= 1; i--) { %>
+            <input
+              type="radio"
+              id="star<%= i %>"
+              name="review[rating]"
+              value="<%= i %>"
+            />
+            <label for="star<%= i %>" title="<%= i %> stars"
+              ><i class="fa-solid fa-star"></i
+            ></label>
+            <% } %>
+          </div>
+        </div>
+        <div class="comment-container">
+          <label class="comment-label" for="comment">Your Review</label>
+          <textarea
+            class="comment-textarea"
+            name="review[comment]"
+            id="comment"
+            placeholder="Share your experience..."
+            required
+          ></textarea>
+        </div>
+      </div>
+      <button class="review-submit">Submit Review</button>
+    </form>
+  </div>
+  <% } %>
+
+  <!-- Map Section -->
+  <div class="my-map">
+    <h2>Where you'll be</h2>
+    <div id="map" style="height: 400px; width: 100%"></div>
+  </div>
+</div>
+
+<script>
+  // Ensure coordinates are properly defined
+  let listingCoordinates;
+  let listingTitle = "<%= listing.title %>";
+  let listingLocation = "<%= listing.location %>";
+
+  <% if (listing.geometry && listing.geometry.coordinates &&
+         Array.isArray(listing.geometry.coordinates) &&
+         listing.geometry.coordinates.length >= 2) { %>
+    // Use the coordinates from the database
+    listingCoordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+    console.log("Using coordinates from database:", listingCoordinates);
+  <% } else { %>
+    // Default coordinates if missing (Kolkata)
+    listingCoordinates = [88.3406, 22.7505];
+    console.warn("Using default coordinates - missing or invalid geometry data");
+  <% } %>
+
+  // Initialize map when DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    const mapElement = document.getElementById("map");
+    if (!mapElement) return;
+
+
+    // Ensure we have valid coordinates
+    let coordinates = listingCoordinates;
+
+    // Leaflet expects [lat, lng] but GeoJSON uses [lng, lat]
+    // So we need to swap the coordinates for Leaflet
+    const lat = coordinates[1];
+    const lng = coordinates[0];
+
+
+    const map = L.map("map").setView([lat, lng], 13);
+
+    L.tileLayer(
+      "https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=jjpRIB8r0mopVZf7hhWR",
+      {
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution:
+          '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a>',
+      }
+    ).addTo(map);
+
+    // Add marker with the same coordinate transformation
+    const marker = L.marker([lat, lng]).addTo(map);
+
+    if (listingTitle && listingLocation) {
+      marker
+        .bindPopup(
+          `<strong>${listingTitle}</strong><br><i class="fa-solid fa-location-dot"></i> ${listingLocation}`
+        )
+        .openPopup();
+    }
+
+    // Force map to recalculate its size if it was hidden
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 300);
+  });
+</script>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Find your perfect stay around the world with TripMate – explore verified listings, trending destinations, and travel with no hidden fees."
+    />
+    <meta
+      name="keywords"
+      content="travel, trip, vacation rentals, TripMate, stay, Airbnb, booking"
+    />
+    <meta name="author" content="Piyansu Saha" />
+
+    <title>TripMate - Find Your Perfect Stay</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css"
+    />
+    <link rel="stylesheet" href="/css/home.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <nav class="navbar">
+      <!-- Brand -->
+      <a href="/" class="brand">
+        <i class="fa-solid fa-umbrella-beach"></i>
+        <span style="margin-left: 0.5rem">TripMate</span>
+      </a>
+
+      <!-- Hamburger for Mobile -->
+      <div class="hamburger" id="hamburger">&#9776;</div>
+
+      <!-- Navigation Links -->
+      <div class="nav-links" id="navLinks">
+        <!-- Desktop Links -->
+        <div class="pc-only-links">
+          <a href="#" class="nav-link">Explore</a>
+          <a href="#destination-section" class="nav-link">Destinations</a>
+          <a href="/listings/new" class="nav-link">Become a Host</a>
+          <a href="#" class="nav-link">Help</a>
+        </div>
+
+        <!-- Mobile-only Links -->
+        <div class="mobile-only-links" style="color: black">
+          <hr />
+          <% if(currentUser) { %>
+          <a href="/user/profile" class="bold"
+            ><i class="fa-solid fa-user"></i> @<%= currentUser.username %></a
+          >
+          <a href="/listings/user-listings"
+            ><i class="fa-solid fa-house-chimney-user"></i> My Listings</a
+          >
+          <a href="/logout"
+            ><i class="fa-solid fa-right-from-bracket"></i> Logout</a
+          >
+          <% } else { %>
+          <a href="/login">Sign in</a>
+          <a href="/signup">Sign up</a>
+          <% } %>
+        </div>
+
+        <!-- Profile Dropdown for Desktop -->
+        <div class="dropdown desktop-only">
+          <button class="dropdown-toggle" id="dropdownToggle">
+            <i class="fa-solid fa-bars menu-icon"></i>
+            <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+          </button>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <% if(currentUser) { %>
+            <a href="/user/profile" class="bold"
+              ><i class="fa-solid fa-user"></i>@<%= currentUser.username %></a
+            >
+            <a href="/listings/user-listings"
+              ><i class="fa-solid fa-house-chimney-user"></i>My Listings</a
+            >
+            <a href="/logout"
+              ><i class="fa-solid fa-right-from-bracket"></i>Logout</a
+            >
+            <% } else { %>
+            <a href="/signup" class="bold">Sign up</a>
+            <a href="/login">Sign in</a>
+            <% } %>
+            <div class="divider"></div>
+            <a href="/help"
+              ><i class="fa-solid fa-circle-question"></i>Help Centre</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="hero-banner"
+      style="background-image: url('/images/banner1.jpg')"
+    >
+      <div class="slider-overlay">
+        <div class="slider-content">
+          <h1>Explore the World with TripMate</h1>
+          <p>
+            Find the best places to stay, connect with fellow travelers, and
+            create stories worth sharing. Every trip begins with the right mate.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="/listings" class="btn btn-primary">Explore Listings</a>
+            <a href="/listings/new" class="btn btn-success">Become a Host</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="search-container">
+      <div class="container">
+        <form action="/listings" method="get">
+          <div class="search-box">
+            <!-- Location -->
+            <div class="search-item">
+              <label>Where to?</label>
+              <div class="input-with-icon">
+                <i class="fas fa-map-marker-alt"></i>
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="Enter destination"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Check-in / Check-out -->
+            <div class="search-item date-picker">
+              <label>Check-in / Check-out</label>
+              <div class="input-with-icon">
+                <i class="far fa-calendar"></i>
+                <input
+                  type="text"
+                  id="date-picker"
+                  placeholder="Add travel dates"
+                  readonly
+                />
+              </div>
+              <div class="date-range-display" id="date-display">
+                <div class="date-block" id="check-in">Select check-in</div>
+                <div class="date-block" id="check-out">Select check-out</div>
+              </div>
+            </div>
+
+            <!-- Guests -->
+            <div class="search-item">
+              <label>Guests</label>
+              <div class="input-with-icon">
+                <i class="fas fa-user-friends"></i>
+                <input
+                  type="text"
+                  id="guests"
+                  placeholder="Number of guests"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Search Button -->
+            <button class="search-btn" type="submit">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </div>
+        </form>
+
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+          <button class="filter-btn">
+            <i class="fas fa-umbrella-beach"></i> Beachfront
+          </button>
+          <button class="filter-btn">
+            <i class="fas fa-paw"></i> Pet-friendly
+          </button>
+          <button class="filter-btn"><i class="fas fa-home"></i> Cabins</button>
+          <button class="filter-btn">
+            <i class="fas fa-swimming-pool"></i> Pool
+          </button>
+          <button class="filter-btn">
+            <i class="fas fa-mountain"></i> Mountain view
+          </button>
+          <button class="filter-btn">
+            <i class="fas fa-wifi"></i> Free WiFi
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Listings -->
+    <section class="featured-listings">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Featured Listings</h2>
+          <div class="navigation-buttons">
+            <button id="prev-featured" class="nav-btn">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="next-featured" class="nav-btn">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="carousel-wrapper">
+          <div class="listings-carousel" id="carousel">
+            <% featured.forEach(listing => { %>
+            <div class="listing-card">
+              <div class="listing-image">
+                <img
+                  src="<%= listing.images && listing.images[0] ? listing.images[0].url : '/images/placeholder.jpg' %>"
+                  alt="<%= listing.title %>"
+                  loading="lazy"
+                />
+                <div class="listing-badge">Featured</div>
+              </div>
+              <div class="listing-content">
+                <div class="listing-header">
+                  <h3><%= listing.title %></h3>
+                  <div class="rating">
+                    <span><%= listing.rating || "4.8" %></span
+                    ><i class="fas fa-star"></i>
+                  </div>
+                </div>
+                <p><%= listing.location %>, <%= listing.country %></p>
+                <div class="listing-tags">
+                  <span class="tag">Popular</span>
+                </div>
+                <div class="listing-footer">
+                  <p class="price">
+                    $<%= listing.price || '0' %> <span>/night</span>
+                  </p>
+                  <a href="/listings/<%= listing._id %>" class="details-link"
+                    >View Details</a
+                  >
+                </div>
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+
+        <div class="center-button">
+          <a href="/listings" class="btn outline-btn">View All Listings</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Destinations -->
+    <section class="destination-section" id="destination-section">
+      <div class="container">
+        <div class="section-heading">
+          <h2 class="section-title">Popular destinations</h2>
+        </div>
+        <div class="destination-grid">
+          <div class="destination-card">
+            <img src="/images/place1.jpg" alt="Taj Mahal" />
+            <div class="destination-info">
+              <div class="destination-name">Taj Mahal | Delhi</div>
+              <div class="destination-properties">1,523 properties</div>
+            </div>
+            <a href="/listings" class="destination-link">Explore Delhi</a>
+          </div>
+          <div class="destination-card">
+            <img src="/images/place2.jpg" alt="Jaipur" />
+            <div class="destination-info">
+              <div class="destination-name">Jaipur | Rajasthan</div>
+              <div class="destination-properties">986 properties</div>
+            </div>
+            <a href="/listings" class="destination-link">Explore Rajasthan</a>
+          </div>
+          <div class="destination-card">
+            <img src="/images/place3.jpg" alt="Darjeeling" />
+            <div class="destination-info">
+              <div class="destination-name">Darjeeling | West Bengal</div>
+              <div class="destination-properties">1,204 properties</div>
+            </div>
+            <a href="/listings" class="destination-link">Explore West Bengal</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-us">
+      <div class="container">
+        <h2 class="section-title">Why Choose TripMate?</h2>
+        <p class="section-subtitle">
+          We're committed to making your travel experience exceptional from
+          start to finish.
+        </p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Verified Listings</h3>
+            <p>
+              Every property is vetted for quality and accuracy to ensure your
+              satisfaction.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <h3>No Hidden Fees</h3>
+            <p>
+              Transparent pricing means you'll never be surprised by unexpected
+              costs.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h3>24/7 Support</h3>
+            <p>
+              Our customer service team is always available to assist with any
+              issues.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Traveler Protection</h3>
+            <p>
+              Enjoy peace of mind with our comprehensive guest protection
+              policy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mobile App Promo -->
+    <section class="app-promo">
+      <div class="container">
+        <div class="app-promo-content">
+          <div class="app-text">
+            <h2 class="section-title">Take TripMate With You</h2>
+            <p>
+              Download our app to search, book and manage your trips on the go.
+              Get exclusive mobile-only deals and travel with confidence.
+            </p>
+            <div class="app-buttons">
+              <a href="/listings" class="btn btn-primary">Download App</a>
+            </div>
+          </div>
+          <div class="app-image">
+            <img
+              src="/images/app.png"
+              alt="Mobile App"
+              loading="lazy"
+              class="floating"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="app-shapes">
+        <div class="app-shape app-shape-1"></div>
+        <div class="app-shape app-shape-2"></div>
+      </div>
+    </section>
+
+    <!-- Property Types -->
+    <section id="explore" class="category-section">
+      <div class="section-heading">
+        <h2 class="section-title">Explore by property type</h2>
+      </div>
+      <div class="categories">
+        <a href="/listings" class="category-card">
+          <div class="category-image">
+            <img src="/images/hotel.jpg" alt="Hotel" />
+          </div>
+          <div class="category-overlay">
+            <div class="category-name">Hotels</div>
+            <div class="category-properties">1,240+ properties</div>
+          </div>
+          <button class="category-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+        </a>
+
+        <a href="/listings" class="category-card">
+          <div class="category-image">
+            <img src="/images/apartment.jpg" alt="Apartment" />
+          </div>
+          <div class="category-overlay">
+            <div class="category-name">Apartments</div>
+            <div class="category-properties">2,380+ properties</div>
+          </div>
+          <button class="category-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+        </a>
+
+        <a href="/listings" class="category-card">
+          <div class="category-image">
+            <img src="/images/resort.jpg" alt="Resort" />
+          </div>
+          <div class="category-overlay">
+            <div class="category-name">Resorts</div>
+            <div class="category-properties">890+ properties</div>
+          </div>
+          <button class="category-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+        </a>
+
+        <a href="/listings" class="category-card">
+          <div class="category-image">
+            <img src="/images/villa.jpg" alt="Villa" />
+          </div>
+          <div class="category-overlay">
+            <div class="category-name">Villas</div>
+            <div class="category-properties">1,580+ properties</div>
+          </div>
+          <button class="category-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Get Travel Deals & Tips</h2>
+          <p>
+            Subscribe to our newsletter and be the first to receive exclusive
+            offers, travel inspiration, and expert advice.
+          </p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email address" />
+            <button type="submit" class="btn btn-success">Subscribe</button>
+          </form>
+          <p class="privacy-note">
+            We respect your privacy. Unsubscribe at any time.
+          </p>
+        </div>
+      </div>
+      <div class="newsletter-shapes">
+        <div class="newsletter-shape newsletter-shape-1"></div>
+        <div class="newsletter-shape newsletter-shape-2"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-about">
+          <h2><span class="logo-icon">🌍</span> TripMate</h2>
+          <p>
+            Find your perfect stay anywhere in the world with TripMate. Whether
+            you're looking for a cozy cabin, luxurious villa, or urban
+            apartment, we've got you covered.
+          </p>
+          <div class="footer-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <div>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Press</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Partners</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Safety Information</a></li>
+              <li><a href="#">Cancellation Options</a></li>
+              <li><a href="#">Report Concern</a></li>
+              <li><a href="#">Contact Us</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Cookie Policy</a></li>
+              <li><a href="#">Accessibility</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <hr />
+        <div class="bottom-text">
+          <p>© 2025 TripMate, Inc. All rights reserved.</p>
+          <div class="footer-locale">
+            <span><i class="fas fa-globe"></i> English (US)</span>
+            <span>$ USD</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script>
+      document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-M6KQZ5SF6V"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-M6KQZ5SF6V");
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4409198394306107"
+    crossorigin="anonymous"></script>
+  </body>
+</html>
